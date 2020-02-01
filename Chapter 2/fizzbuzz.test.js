@@ -44,20 +44,15 @@ function printNumbersBuzz(len){
 function printNumbersFizzBuzz(len){
     var fizzbuzzResult = "";
     for (currentNum=1; currentNum<=len; currentNum++){
-        if(currentNum %3 == 0){
-            if(currentNum %5 == 0){
-                fizzbuzzResult += "FizzBuzz";
-            } else {
-                fizzbuzzResult += "Fizz";
-            }
+        if(currentNum %15 == 0){
+            fizzbuzzResult += "FizzBuzz\n";
+        } else if(currentNum %5 == 0){
+            fizzbuzzResult += "Buzz\n";
+        } else if (currentNum %3 ==0){
+            fizzbuzzResult += "Fizz\n";
         } else {
-            if(currentNum %5 == 0){
-                fizzbuzzResult += "Buzz";
-            } else {
-                fizzbuzzResult += currentNum;
-            }
+            fizzbuzzResult += currentNum+"\n";
         }
-        fizzbuzzResult += "\n";
     }
     return fizzbuzzResult.trim();
 }
