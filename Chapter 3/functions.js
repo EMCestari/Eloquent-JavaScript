@@ -136,3 +136,60 @@ let wrap1 = wrapValue(1); //Expected: 1
 let wrap2 = wrapValue(2); //Expected: 2
 console.log(wrap1());
 console.log(wrap2());
+//Closure: being able to reference a specific instance of a local variable, in a scope that envelopes it
+// A function that closes "upon" a local variable is defined A closure.
+
+function multiplier(factor){
+    return number => number * factor;
+}
+let twice = multiplier(2);
+console.log(twice(5));
+//Mental model: function values can be thought as if they contain both code of body AND the environment in which they are created. When called,  body of function sees the environment in which it has been created, not the one in which it has been called.
+
+//Functions can call themselves (until they saturate stack)
+function powerRecursive(base, exponent){
+    if (exponent == 0) {
+        return 1;
+    } else {
+        return base * powerRecursive(base, exponent - 1);
+    }
+}
+console.log(powerRecursive(2,3)); //Expected: 8
+//It's a great style, but it costs in terms of performance!!! In JavaScript, it is 3 times slower than cyclic function
+
+console.log("\n\n");
+
+function findSolution(target){
+    function find(current,history){
+        if (current == target){
+            return history;
+        } else if (current > target) {
+            return null;
+        } else {
+            return find(current + 5, "(" + history + " + 5)") ||
+                   find(current * 3, "(" + history + " * 3)");
+        }
+    }
+    return find(1, "1");
+}
+console.log(findSolution(24)); //Expected: (((1*3) + 5) * 3)
+
+console.log("\n\n")
+
+function printFarmInventory(vacche, polli){
+    let cowString = String(vacche);
+    while (cowString.length < 3){
+        cowString = "0" + cowString;
+    }
+    console.log(cowString + " Vacche");
+    let chickenString = String(polli);
+    while(chickenString.length < 3){
+        chickenString = "0" + chickenString;
+    }
+    console.log(chickenString + " Polli");
+}
+printFarmInventory(7,11);
+console.log("\n\n")
+
+
+console.log("\n\n")
