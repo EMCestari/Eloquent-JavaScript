@@ -34,6 +34,12 @@ test("Reverse array - same, odd", () => {
     expect(reverseArrayInPlace([1,2,3,4,5])).toEqual([5,4,3,2,1]);
 });
 
+test("Launcher", () => {
+    expect(launcher()).toEqual(1);
+});
+
+
+
 function myRange(start, end, step=1){
     result = [];
     let counter = 0;
@@ -87,6 +93,80 @@ function reverseArrayInPlace(numbers){
             numbers[arrayLength-i-1] = numbers[i];
             numbers[i] = temporary;
     }
-    
+
     return numbers;
+}
+
+
+function prepend(elem, list){
+    let newList = {
+        value: elem,
+        rest: list
+    }
+    return newList;
+}
+
+function arrayToList(myArray){
+    let list = {
+        value: myArray[myArray.length-1],
+        rest: null
+    };
+
+    for(let counter=myArray.length-2; counter>=0; counter--){
+        list = prepend(myArray[counter],list); 
+    }
+
+    return list;
+}
+
+function nth(list, position){
+    if (list == null){
+        return undefined;
+    }
+
+    if(position == 1){
+        return list.value;
+    } else return nth(list.rest, position-1);
+}
+
+function listToArray(list){
+    let newArray = [];
+    let scrapeList = true;
+    let position = 1;
+
+    while(scrapeList){
+        let currentValue = nth(list, position);
+        if (currentValue != undefined) {
+            newArray.push(currentValue);
+            position++; 
+        } else {
+            scrapeList = false;
+        }
+    }
+
+    return newArray;
+}
+
+function launcher(){
+ 
+    let list = {
+        value: 5,
+        rest: {
+            value: 4,
+            rest: {
+                value: 3,
+                rest: {
+                    value: 2,
+                    rest: {
+                        value: 1,
+                        rest: null
+                    }
+                }
+            }
+        }
+    };
+
+    console.log(listToArray(list));
+
+    return 1;
 }
