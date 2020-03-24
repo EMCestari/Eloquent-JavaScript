@@ -177,15 +177,22 @@ function launcher(){
 
 
 function deepEqual(firstValue, secondValue){
-    let result = true;
 
-    if ( (typeof(firstValue) == Object) && (firstValue != null) && (typeof(secondValue) == Object) && (secondValue != null ) ){
-        result = deepEqual(Object.keys(firstValue),Object.keys(secondValue));
+
+    if ( (typeof(firstValue) == "object") && (firstValue != null) && (typeof(secondValue) == "object") && (secondValue != null ) ){
+        if (Object.keys(firstValue) == Object.keys(secondValue)){
+            return false;
+        } else {
+            for (let prop in firstValue){
+                if (!prop in secondValue || !deepEqual(firstValue[prop],secondValue[prop])){
+                    return false;
+                }
+            }
+            return true;
+        }
     } else {
-        result = firstValue === secondValue;
+        return firstValue === secondValue;
     }
-
-    return result;
 }
 
 function deepEqualLauncher(){
