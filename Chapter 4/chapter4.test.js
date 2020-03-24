@@ -38,6 +38,10 @@ test("Launcher", () => {
     expect(launcher()).toEqual(1);
 });
 
+test("DeepEqualLauncher", () => {
+    expect(deepEqualLauncher()).toEqual(true);
+});
+
 
 
 function myRange(start, end, step=1){
@@ -169,4 +173,54 @@ function launcher(){
     console.log(listToArray(list));
 
     return 1;
+}
+
+
+function deepEqual(firstValue, secondValue){
+    let result = true;
+
+    if ( (typeof(firstValue) == Object) && (firstValue != null) && (typeof(secondValue) == Object) && (secondValue != null ) ){
+        result = deepEqual(Object.keys(firstValue),Object.keys(secondValue));
+    } else {
+        result = firstValue === secondValue;
+    }
+
+    return result;
+}
+
+function deepEqualLauncher(){
+    let obj1 = {
+        value1: "Ciao",
+        value2: 3,
+        value3: 5
+    };
+
+    let obj2 = {
+        value1: "Ciao",
+        value2: 3,
+        value3: 5
+    }
+
+    let obj3 = {
+        value1: "iao",
+        value2: 3,
+        value3: 5
+    }
+
+    let obj4 = {
+        value1: "Ciao",
+        value2: 1,
+        value3: 5
+    }
+
+    console.log(deepEqual(obj1,obj1)); //Expected: True
+    console.log(deepEqual(obj1,obj2)); //Expected: True
+    console.log(deepEqual(obj1,obj3)); //Expected: False
+    console.log(deepEqual(obj1,obj4)); //Expected: False
+    console.log(deepEqual(obj3,obj4)); //Expected: False
+    console.log(deepEqual(null,obj1)); //Expected: False
+    console.log(deepEqual(5,5)); //Expected: True
+    console.log(deepEqual(4,5)); //Expected: False
+
+    return true;
 }
