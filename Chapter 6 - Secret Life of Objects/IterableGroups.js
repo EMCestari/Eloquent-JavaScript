@@ -1,6 +1,23 @@
+class GroupIterator {
+    constructor(group) {
+        this.groupElements = group.groupElements;
+        this.currentPosition = 0;
+    }
+
+    next() {
+        if (this.currentPosition === this.groupElements.length)
+            return {done:true};
+
+        let value = this.groupElements[this.currentPosition];
+        this.currentPosition++;
+
+        return {value, done: false};
+    }
+}
+
 class Group{
     constructor(){
-        this.group = [];
+        this.groupElements = [];
     }
 
     add(value) {
@@ -25,5 +42,9 @@ class Group{
             }
         }
         return false;
+    }
+
+    [Symbol.iterator] = function() {
+        return new GroupIterator(this);
     }
 }
