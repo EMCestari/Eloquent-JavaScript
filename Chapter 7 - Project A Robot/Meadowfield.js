@@ -82,3 +82,84 @@ class VillageState {
     }
 }
 
+// A Robot is modeled as a function that takes a VillageState object and returns the name of a nearby place
+// We also implement a "memory" so that the robot can take it into consideration when executing plans.
+function runRobot(state, robot, memory){
+    for (let turn = 0;; turn++){
+        if(state.parcels.length == 0){ // If there are no other parcels to deliver, return a final message and exit
+            console.log(`Done in ${turn} turns`);
+            break;
+        }
+        let action = robot(state,memory); //An action
+        state = state.move(action.direction); // action.direction contains the destination
+        memory = action.memory; // We also allow the robot to return a new memory.
+        console.log(`Moved to ${action.direction}`);
+    }
+}
+
+// One (dumb) strategy for programming the robot is just using random movements.
+function randomPick(array){
+    let choice = Math.floor(Math.random() * array.length);
+    return array[choice];
+}
+
+function randomRobot(state){
+    return {direction: randomPick(roadGraph[state.place])};
+}
+
+// A static method is a good place to create a new state with some parcels
+VillageState.random = function(parcelCount = 5) {
+    let parcels = [];
+    for (let i=0; i<parcelCount; i++) {
+        let address = randomPick(Object.keys(roadGraph)); // It takes a random address
+        let place;
+        do {
+            place = randomPick(Object.keys(roadGraph));
+        } while (place == address);
+        parcels.push({place, address});
+    }
+    return new VillageState("Post Office", parcels);
+};
+
+// We can define a fixed route...
+const mailRoute = [
+    "Alice's House", "Cabin", "Alice's House", "Bob's House",
+    "Town Hall", "Daria's House", "Ernie's House",
+    "Grete's House", "Shop", "Grete's House", "Farm",
+    "Marketplace", "Post Office"
+];
+
+// ... and a robot that just follow that fixed route.
+function routeRobot(state, memory) {
+    if (memory.length == 0) {
+        memory = mailRoute;
+    }
+    return {direction: memory[0], memory: memory.slice(1)};
+}
+
+// Still, a "smart" robot should have some sort of route-finding algorithm.
+// We are interested in the shortest route.
+function findRoute(graph, from, to) {
+    let work = [{at: from, route:[]}];
+    for (let i=0; i<work.length; i++){
+        let {at, route} = work[i];
+        for (let place of graph[at]){
+            if (place == to) return route.concat(place);
+            if(!work.some(w => w.at == place)) {
+                work.push({at: place, route: route.concat(place)});
+            }
+        }
+    }
+}
+
+function goalOrientedRobot({place, parcels}, route){
+    if(route.length == 0) {
+        let parcel = parcels[0];
+        if (parcel.place != place) {
+            route = findRoute(roadGraph, place, parcel.place);
+        } else {
+            route = findRoute(roadGraph, place, parcel.address);
+        }
+    }
+    return {direction: route[0], memory: route.slice(1)};
+}
