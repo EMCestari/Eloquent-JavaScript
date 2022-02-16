@@ -42,7 +42,7 @@ function printNumbersBuzz(len){
 }
 
 function printNumbersFizzBuzz(len){
-    var fizzbuzzResult = "";
+    let fizzbuzzResult = "";
     for (currentNum=1; currentNum<=len; currentNum++){
         if(currentNum %15 == 0){
             fizzbuzzResult += "FizzBuzz\n";
@@ -54,5 +54,4 @@ function printNumbersFizzBuzz(len){
             fizzbuzzResult += currentNum+"\n";
         }
     }
-    return fizzbuzzResult.trim();
 }

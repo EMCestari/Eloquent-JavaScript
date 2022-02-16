@@ -87,8 +87,11 @@ class VillageState {
 function runRobot(state, robot, memory){
     for (let turn = 0;; turn++){
         if(state.parcels.length == 0){ // If there are no other parcels to deliver, return a final message and exit
+            /*
             console.log(`Done in ${turn} turns`);
             break;
+             */
+            return turn;
         }
         let action = robot(state,memory); //An action
         state = state.move(action.direction); // action.direction contains the destination
@@ -162,4 +165,38 @@ function goalOrientedRobot({place, parcels}, route){
         }
     }
     return {direction: route[0], memory: route.slice(1)};
+}
+
+
+function compareRobots(firstRobot,secondRobot,startingMemory){
+    let firstRobotResults = [];
+    let secondRobotResults = [];
+
+    for (let i=0; i<100; i++){
+        let state = VillageState.random();
+        let firstRobotTurns = runRobot(state, firstRobot, startingMemory);
+        let secondRobotTurns = runRobot(state, secondRobot, startingMemory)
+        firstRobotResults.push(firstRobotTurns);
+        secondRobotResults.push(secondRobotTurns);
+    }
+
+    console.log(`First Robot results are: ${firstRobotResults}`);
+    let firstRobotAverage = calculateAverage(firstRobotResults);
+    console.log(`Second Robot results are: ${secondRobotResults}`);
+    let secondRobotAverage = calculateAverage(secondRobotResults);
+
+    console.log('---------------------- Final Results ----------------------');
+    console.log(`First Robot Average Steps: ${firstRobotAverage}`);
+    console.log(`Second Robot Average Steps: ${secondRobotAverage}`);
+    console.log('-----------------------------------------------------------');
+}
+
+function calculateAverage(arrayOfIntegers){
+    let sum = 0;
+    for (let i in arrayOfIntegers){
+        sum += arrayOfIntegers[i];
+    }
+    console.log(`Total number of steps for ${arrayOfIntegers.length} tasks is ${sum}`);
+    let average = sum/arrayOfIntegers.length;
+    return average;
 }
