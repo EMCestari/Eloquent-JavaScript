@@ -1,13 +1,13 @@
 test("0 and 10 returns 0", () => {
-    expect(minNumber(10,0)).toBe(0);
+    expect(min(10,0)).toBe(0);
 });
 
 test("0 and 0 returns Equals", () => {
-    expect(minNumber(0,0)).toBe("Equals");
+    expect(min(0,0)).toBe("Equals");
 });
 
 test("100 and 10 returns 10", () => {
-    expect(minNumber(100,10)).toBe(10);
+    expect(min(100,10)).toBe(10);
 });
 
 test("0 is even", () => {
@@ -46,7 +46,8 @@ test("aBxcdxeBfxgB contains 3 xs", () => {
     expect(countChar("aBxcdxeBfxgB","x")).toBe(3);
 });
 
-const minNumber = function(a,b){
+// FROM
+const min = function(a,b){
     if(a<b){
         return a;
     } else if (a>b){
@@ -56,7 +57,26 @@ const minNumber = function(a,b){
     }
 }
 
+// TO
+const min2 = function(a,b){
+    if (a == b){
+        return "Equals";
+    }
+    if (a<b) return a
+    else return b;
+}
+
+// TO
+const min3 = function(a,b){
+    if (a != b){
+        return (a <= b) ? a : b;
+    } else return "Equals";
+}
+
+
 function isEven(num){
+    num = Math.abs(num); // Without this line, the solution only works with natural numbers, as with a negative number recursion will never end (e.g. if it starts from -1, it will never reach 0)
+
     if(num==0){
         return true;
     } else if (num==1){
@@ -65,7 +85,7 @@ function isEven(num){
         return isEven(num-2);
     }
 }
-//This solution only works with natural numbers, as with a negative number recursion will never end (e.g. if it starts from -1, it will never reach 0)
+
 
 const countBs = (sentence) => {
     numberOfBs = 0;
@@ -85,4 +105,8 @@ const countChar = (sentence, character) => {
         }
     }
     return numberOfChars;
+}
+
+const optimizedCountBs = (sentence) => {
+    return countChar(sentence, 'B');
 }
