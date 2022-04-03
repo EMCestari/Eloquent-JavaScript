@@ -303,8 +303,6 @@ console.log(stringObject[toStringSymbol]());
 The object given to a for/of loop is expected to be iterable.
 This means it has a method named with the Symbol.iterator symbol
 (a symbol value defined by the language, stored as a property of the Symbol function).
-
-
  */
 
 let okIterator = "OK"[Symbol.iterator]();
